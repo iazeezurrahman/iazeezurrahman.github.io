@@ -1,122 +1,241 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azeez ur Rahman - Editor, Coder & Tech Enthusiast</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #fff;
-            overflow-x: hidden;
-        }
-        header {
-            text-align: center;
-            padding: 80px 20px;
-            background: rgba(0, 0, 0, 0.6);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 3rem;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #00d4ff, #ffffff, #00d4ff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite;
-        }
-        header p {
-            margin: 15px 0 0;
-            font-size: 1.3rem;
-            color: #ccc;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 1.2s ease-in-out forwards 0.3s;
-        }
-        section {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeUp 1.2s ease forwards;
-        }
-        section:nth-of-type(1) { animation-delay: 0.5s; }
-        section:nth-of-type(2) { animation-delay: 0.9s; }
-        section:nth-of-type(3) { animation-delay: 1.3s; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azeez Ur Rahman | Portfolio</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    color: #fff;
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1f1c2c);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+  }
 
-        section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #00d4ff;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-        p {
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: #ddd;
-        }
-        footer {
-            text-align: center;
-            padding: 25px;
-            margin-top: 50px;
-            font-size: 0.95rem;
-            background: rgba(0, 0, 0, 0.7);
-            color: #aaa;
-            opacity: 0;
-            animation: fadeUp 1.2s ease forwards 1.7s;
-        }
-        footer span {
-            background: linear-gradient(90deg, #00d4ff, #ffffff, #00d4ff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 4s linear infinite;
-        }
+  @keyframes gradientBG {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+  }
 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-    </style>
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 350px; /* only upper section */
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  header {
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header h1 {
+    font-size: 3rem;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg,#00d4ff,#ffffff,#00d4ff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 5s linear infinite;
+    margin-bottom: 10px;
+  }
+
+  header p {
+    font-size: 1.3rem;
+    color: #ccc;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s forwards 0.5s;
+  }
+
+  section {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  section h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid #00d4ff;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+  }
+
+  section p {
+    color: #ddd;
+    line-height: 1.8;
+  }
+
+  footer {
+    text-align: center;
+    padding: 25px;
+    background: rgba(0,0,0,0.7);
+    color: #aaa;
+    margin-top: 50px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border: 2px solid #00d4ff;
+    color: #00d4ff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: #00d4ff;
+    color: #111;
+  }
+
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px);}
+    to { opacity:1; transform:translateY(0);}
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Azeez ur Rahman</h1>
-        <p>Editor, Coder & Tech Enthusiast</p>
-    </header>
 
-    <section>
-        <h2>About Me</h2>
-        <p>Hello, I'm Azeez ur Rahman. I'm passionate about technology and coding, constantly exploring new ways to create, learn, and innovate in the world of computers. Alongside coding, I also enjoy video editing and designing, blending creativity with technical skills to build unique projects.</p>
-    </section>
+<canvas id="bgCanvas"></canvas>
 
-    <section>
-        <h2>Skills</h2>
-        <p>✔ Coding & Programming</p>
-        <p>✔ Video Editing</p>
-        <p>✔ Technology Enthusiasm</p>
-    </section>
+<header>
+  <h1>Azeez ur Rahman</h1>
+  <p>Website Design | Tech Enthusiast | Video Editing & Design</p>
+</header>
 
-    <section>
-        <h2>Connect With Me</h2>
-        <p>Email: <a href="mailto:azeezurr21@gmail.com" style="color:#00d4ff;">azeezurr21@gmail.com</a></p>
-        <p>Instagram: <a href="https://instagram.com/th_azeez_" target="_blank" style="color:#00d4ff;">@th_azeez_</a> | <a href="https://instagram.com/theeditvilla" target="_blank" style="color:#00d4ff;">@theeditvilla</a></p>
-    </section>
+<section id="about">
+  <h2>About Me</h2>
+  <p>Hello, I'm Azeez ur Rahman. I'm passionate about technology and learning coding, constantly exploring new ways to create, learn, and innovate in the world of computers. Alongside coding, I also enjoy video editing and designing, blending creativity with technical skills to build unique projects.</p>
+</section>
 
-    <footer>
-        <p>🚀 Designed & Developed by <span>Azeez ur Rahman</span></p>
-    </footer>
+<section id="skills">
+  <h2>Skills</h2>
+  <p>✔ Learning Coding & Programming</p>
+  <p>✔ Website Design</p>
+  <p>✔ Video Editing  
+  <p>✔ Technology Enthusiasm</p>
+  <p>✔ Graphic Design</p>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:azeezurr21@gmail.com" style="color:#00d4ff;">azeezurr21@gmail.com</a></p>
+  <p>Instagram: <a href="https://instagram.com/th_azeez_" target="_blank" style="color:#00d4ff;">@th_azeez_</a> | <a href="https://instagram.com/theeditvilla" target="_blank" style="color:#00d4ff;">@theeditvilla</a></p>
+  <a href="mailto:azeezurr21@gmail.com" class="btn">Send Email</a>
+</section>
+
+<footer>
+  <p>🚀 Designed & Developed by Azeez ur Rahman</p>
+</footer>
+
+<script>
+  // Animate sections on scroll
+  const sections = document.querySelectorAll('section, footer');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, {threshold:0.2});
+  sections.forEach(sec => observer.observe(sec));
+
+  // Unique particle background with connected lines
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = 350;
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2 + 1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if(this.x < 0) this.x = width;
+      if(this.x > width) this.x = 0;
+      if(this.y < 0) this.y = height;
+      if(this.y > height) this.y = 0;
+    }
+    draw() {
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  const particles = [];
+  for(let i=0; i<60; i++){ particles.push(new Particle()); }
+
+  function connectParticles() {
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 100){
+          ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0,0,width,height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = 350;
+  });
+</script>
+
 </body>
 </html>
