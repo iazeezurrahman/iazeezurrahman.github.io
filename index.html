@@ -12,15 +12,7 @@
     color: #fff;
     position: relative;
     min-height: 100vh;
-    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1f1c2c);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-  }
-
-  @keyframes gradientBG {
-    0% {background-position:0% 50%;}
-    50% {background-position:100% 50%;}
-    100% {background-position:0% 50%;}
+    background: linear-gradient(180deg, #0f2027, #203a43, #2c5364, #1f1c2c);
   }
 
   canvas {
@@ -73,9 +65,24 @@
     z-index: 1;
   }
 
-  section h2 { font-size: 2rem; border-bottom: 2px solid #00d4ff; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
-  section p, section li { color: #ddd; line-height: 1.8; font-size: 1.1rem; }
-  section ul { list-style: disc; padding-left: 20px; }
+  section h2 { 
+    font-size: 2rem; 
+    border-bottom: 2px solid #00d4ff; 
+    display: inline-block; 
+    padding-bottom: 5px; 
+    margin-bottom: 20px; 
+  }
+
+  section p, section li { 
+    color: #ddd; 
+    line-height: 1.8; 
+    font-size: 1.1rem; 
+  }
+
+  section ul { 
+    list-style: disc; 
+    padding-left: 20px; 
+  }
 
   footer {
     text-align: center;
@@ -90,8 +97,21 @@
     z-index: 1;
   }
 
-  .btn { display: inline-block; padding: 10px 20px; margin-top: 15px; border: 2px solid #00d4ff; color: #00d4ff; border-radius: 5px; text-decoration: none; transition: 0.3s; }
-  .btn:hover { background: #00d4ff; color: #111; }
+  .btn { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    margin-top: 15px; 
+    border: 2px solid #00d4ff; 
+    color: #00d4ff; 
+    border-radius: 5px; 
+    text-decoration: none; 
+    transition: 0.3s; 
+  }
+
+  .btn:hover { 
+    background: #00d4ff; 
+    color: #111; 
+  }
 
   @keyframes shine { to { background-position: 200% center; } }
   @keyframes fadeUp { from { opacity:0; transform:translateY(30px);} to { opacity:1; transform:translateY(0);} }
@@ -146,65 +166,51 @@
   }, {threshold:0.2});
   sections.forEach(sec => observer.observe(sec));
 
-  // Original lightweight particle background
+  // Shooting Stars Background
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = 350;
 
-  class Particle {
+  class Star {
     constructor() {
+      this.reset();
+    }
+    reset() {
       this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.5;
-      this.vy = (Math.random() - 0.5) * 0.5;
-      this.size = Math.random() * 2 + 1;
+      this.y = Math.random() * height / 2;
+      this.len = Math.random() * 80 + 10;
+      this.speed = Math.random() * 4 + 2;
+      this.opacity = Math.random() * 0.5 + 0.5;
     }
     update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      if(this.x < 0) this.x = width;
-      if(this.x > width) this.x = 0;
-      if(this.y < 0) this.y = height;
-      if(this.y > height) this.y = 0;
-    }
-    draw() {
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-      ctx.fill();
-    }
-  }
-
-  const particles = [];
-  for(let i=0; i<60; i++){ particles.push(new Particle()); }
-
-  function connectParticles() {
-    for(let i=0;i<particles.length;i++){
-      for(let j=i+1;j<particles.length;j++){
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if(dist < 100){
-          ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
+      this.x -= this.speed;
+      this.y += this.speed / 2;
+      if(this.x < 0 || this.y > height){
+        this.reset();
+        this.x = width + 10;
       }
     }
+    draw() {
+      ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x - this.len, this.y + this.len / 2);
+      ctx.stroke();
+    }
   }
 
-  function animate() {
+  const stars = [];
+  for(let i=0; i<30; i++) stars.push(new Star());
+
+  function animateStars() {
     ctx.clearRect(0,0,width,height);
-    particles.forEach(p => { p.update(); p.draw(); });
-    connectParticles();
-    requestAnimationFrame(animate);
+    stars.forEach(s => { s.update(); s.draw(); });
+    requestAnimationFrame(animateStars);
   }
 
-  animate();
+  animateStars();
 
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
