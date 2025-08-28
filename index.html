@@ -28,14 +28,14 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 400px; /* upper section */
+    height: 350px; /* only upper section */
     z-index: 0;
     pointer-events: none;
   }
 
   header {
     text-align: center;
-    padding: 120px 20px;
+    padding: 100px 20px;
     position: relative;
     z-index: 1;
   }
@@ -73,18 +73,9 @@
     z-index: 1;
   }
 
-  section h2 {
-    font-size: 2rem;
-    border-bottom: 2px solid #00d4ff;
-    display: inline-block;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
-  }
-
-  section p {
-    color: #ddd;
-    line-height: 1.8;
-  }
+  section h2 { font-size: 2rem; border-bottom: 2px solid #00d4ff; display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
+  section p, section li { color: #ddd; line-height: 1.8; font-size: 1.1rem; }
+  section ul { list-style: disc; padding-left: 20px; }
 
   footer {
     text-align: center;
@@ -99,30 +90,11 @@
     z-index: 1;
   }
 
-  .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 15px;
-    border: 2px solid #00d4ff;
-    color: #00d4ff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: 0.3s;
-  }
+  .btn { display: inline-block; padding: 10px 20px; margin-top: 15px; border: 2px solid #00d4ff; color: #00d4ff; border-radius: 5px; text-decoration: none; transition: 0.3s; }
+  .btn:hover { background: #00d4ff; color: #111; }
 
-  .btn:hover {
-    background: #00d4ff;
-    color: #111;
-  }
-
-  @keyframes shine {
-    to { background-position: 200% center; }
-  }
-
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(30px);}
-    to { opacity:1; transform:translateY(0);}
-  }
+  @keyframes shine { to { background-position: 200% center; } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px);} to { opacity:1; transform:translateY(0);} }
 </style>
 </head>
 <body>
@@ -136,16 +108,18 @@
 
 <section id="about">
   <h2>About Me</h2>
-  <p>Hello, I'm Azeez ur Rahman. I'm passionate about technology and learning coding, constantly exploring new ways to create, learn, and innovate in the world of computers. Alongside coding, I also enjoy video editing and designing, blending creativity with technical skills to build unique projects.</p>
+  <p>Hello, I'm Azeez ur Rahman. Passionate about technology and learning coding, constantly exploring new ways to create, learn, and innovate in the world of computers. Alongside coding, I also enjoy video editing and designing, blending creativity with technical skills to build unique projects.</p>
 </section>
 
 <section id="skills">
   <h2>Skills</h2>
-  <p>✔ Learning Coding & Programming</p>
-  <p>✔ Website Design</p>
-  <p>✔ Video Editing</p>
-  <p>✔ Technology Enthusiasm</p>
-  <p>✔ Graphic Design</p>
+  <ul>
+    <li>Learning Coding & Programming</li>
+    <li>Website Design</li>
+    <li>Video Editing</li>
+    <li>Technology Enthusiasm</li>
+    <li>Graphic Design</li>
+  </ul>
 </section>
 
 <section id="contact">
@@ -156,11 +130,11 @@
 </section>
 
 <footer>
-  <p>🚀 Designed & Developed by Azeez ur Rahman</p>
+  <p>🚀 Designed & Developed by Azeez Ur Rahman</p>
 </footer>
 
 <script>
-  // Animate sections on scroll
+  // Scroll reveal
   const sections = document.querySelectorAll('section, footer');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -172,19 +146,19 @@
   }, {threshold:0.2});
   sections.forEach(sec => observer.observe(sec));
 
-  // HD Professional Particle Background
+  // Original lightweight particle background
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
   let width = canvas.width = window.innerWidth;
-  let height = canvas.height = 400;
+  let height = canvas.height = 350;
 
   class Particle {
     constructor() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.8; // smoother speed
-      this.vy = (Math.random() - 0.5) * 0.8;
-      this.size = Math.random() * 2 + 1.5; // slightly bigger
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2 + 1;
     }
     update() {
       this.x += this.vx;
@@ -195,7 +169,7 @@
       if(this.y > height) this.y = 0;
     }
     draw() {
-      ctx.fillStyle = 'rgba(255,255,255,0.8)'; // brighter for HD
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
       ctx.fill();
@@ -203,8 +177,7 @@
   }
 
   const particles = [];
-  const particleCount = Math.floor(width / 15); // more particles on larger screens
-  for(let i=0; i<particleCount; i++){ particles.push(new Particle()); }
+  for(let i=0; i<60; i++){ particles.push(new Particle()); }
 
   function connectParticles() {
     for(let i=0;i<particles.length;i++){
@@ -212,9 +185,9 @@
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx*dx + dy*dy);
-        if(dist < 120){ // increased distance for more connections
-          ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-          ctx.lineWidth = 1.2;
+        if(dist < 100){
+          ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+          ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
@@ -232,9 +205,10 @@
   }
 
   animate();
+
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
-    height = canvas.height = 400;
+    height = canvas.height = 350;
   });
 </script>
 
