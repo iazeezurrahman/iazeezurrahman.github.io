@@ -1,222 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Azeez Ur Rahman | Portfolio</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden;
-    color: #fff;
-    position: relative;
-    min-height: 100vh;
-    background: linear-gradient(180deg, #0f2027, #203a43, #2c5364, #1f1c2c);
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Azeez ur Rahman | Portfolio</title>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 350px; /* only upper section */
-    z-index: 0;
-    pointer-events: none;
-  }
+  <style>
+    /* ---------- Reset & Base ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --bg:#0b0c10; --bg2:#101217; --text:#e8f1f2; --muted:#b8c6c9;
+      --brand:#00d4ff; --brand2:#66fcf1; --card:rgba(255,255,255,0.06);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-  header {
-    text-align: center;
-    padding: 100px 20px;
-    position: relative;
-    z-index: 1;
-  }
+    /* ---------- Starfield Canvas (full screen) ---------- */
+    canvas#stars {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      z-index: -2; background: radial-gradient(ellipse at top, #0d1b2a 0%, #0b0c10 60%);
+    }
 
-  header h1 {
-    font-size: 3rem;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg,#00d4ff,#ffffff,#00d4ff);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 5s linear infinite;
-    margin-bottom: 10px;
-  }
+    /* ---------- Nav ---------- */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; gap: 24px; justify-content: center; align-items: center;
+      padding: 14px 20px; z-index: 10;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    nav a {
+      color: var(--text); text-decoration: none; font-weight: 600; font-size: .95rem;
+      padding: 8px 12px; border-radius: 999px; transition: .25s;
+    }
+    nav a:hover, nav a.active { color: #0b0c10; background: var(--brand2); }
 
-  header p {
-    font-size: 1.3rem;
-    color: #ccc;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 1s forwards 0.5s;
-  }
+    /* ---------- Hero ---------- */
+    .home-section {
+      min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 100px 16px 70px;
+    }
+    .home-content { max-width: 980px; animation: fadeUp .9s ease both; }
+    .home-content h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.12; font-weight: 800; letter-spacing: .5px;
+      background: linear-gradient(90deg, var(--brand), #fff, var(--brand)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: shine 6s linear infinite;
+    }
+    .tagline {
+      margin-top: 12px; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+    }
+    .cta-row { display: flex; gap: 14px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 20px; border-radius: 12px; border: 1px solid transparent; cursor: pointer; text-decoration: none;
+      font-weight: 700; transition: .25s; box-shadow: var(--shadow);
+    }
+    .btn-primary { background: var(--brand2); color: #0b0c10; }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .btn-ghost   { background: transparent; border-color: rgba(255,255,255,.15); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--brand); color: var(--brand); transform: translateY(-2px); }
 
-  section {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 40px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease;
-    position: relative;
-    z-index: 1;
-  }
+    /* ---------- Section generic ---------- */
+    section { padding: 90px 18px; position: relative; }
+    .container { width: min(1100px, 92vw); margin: 0 auto; }
+    .section-title {
+      text-align: center; font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin-bottom: 30px; color: var(--brand2); font-weight: 800;
+      text-shadow: 0 4px 20px rgba(0,212,255,.2);
+    }
 
-  section h2 { 
-    font-size: 2rem; 
-    border-bottom: 2px solid #00d4ff; 
-    display: inline-block; 
-    padding-bottom: 5px; 
-    margin-bottom: 20px; 
-  }
+    /* ---------- Cards / About ---------- */
+    .card {
+      background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 18px; padding: 28px;
+      box-shadow: var(--shadow); transform: translateY(18px); opacity: 0; transition: transform .6s ease, opacity .6s ease, box-shadow .3s ease;
+    }
+    .card.show { transform: translateY(0); opacity: 1; }
+    .about-grid { display: grid; gap: 22px; }
+    .about-text { line-height: 1.85; color: #dbe5e7; font-size: 1.06rem; }
+    .skills-grid {
+      margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px;
+    }
+    .skill-pill {
+      background: #121821; border: 1px solid rgba(255,255,255,.06); color: #e9f7fb;
+      padding: 12px 14px; border-radius: 12px; font-weight: 700; text-align: center; transition: .25s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .skill-pill:hover { background: rgba(0,212,255,.18); color: #08131a; transform: translateY(-2px); }
 
-  section p, section li { 
-    color: #ddd; 
-    line-height: 1.8; 
-    font-size: 1.1rem; 
-  }
+    /* ---------- "What I Work With" Animated Pills ---------- */
+    .work-pill {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .work-pill i { font-size: 1.2rem; transition: transform 0.3s ease, color 0.3s ease; }
+    .work-pill:hover {
+      background: var(--brand2);
+      color: #0b0c10;
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,212,255,.25);
+    }
+    .work-pill:hover i {
+      transform: rotate(-15deg) scale(1.2);
+      color: #08131a;
+    }
 
-  section ul { 
-    list-style: disc; 
-    padding-left: 20px; 
-  }
+    /* ---------- Contact ---------- */
+    .contact-grid {
+      display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .contact-card {
+      background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 22px; text-align: center;
+      transition: .25s; box-shadow: var(--shadow); transform: translateY(18px); opacity: 0;
+    }
+    .contact-card.show { transform: translateY(0); opacity: 1; }
+    .contact-icon {
+      width: 58px; height: 58px; display: grid; place-items: center; border-radius: 14px; margin: 0 auto 10px;
+      background: radial-gradient(100% 100% at 50% 0%, rgba(0,212,255,.25), rgba(0,212,255,.05));
+      border: 1px solid rgba(0,212,255,.25); animation: float 5s ease-in-out infinite;
+    }
+    .contact-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .contact-card p { color: var(--muted); }
+    .contact-card a { color: var(--text); text-decoration: none; }
+    .contact-card:hover { transform: translateY(-6px); border-color: rgba(0,212,255,.35); box-shadow: 0 12px 40px rgba(0,212,255,.15); }
 
-  footer {
-    text-align: center;
-    padding: 25px;
-    background: rgba(0,0,0,0.7);
-    color: #aaa;
-    margin-top: 50px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease;
-    position: relative;
-    z-index: 1;
-  }
+    .contact-actions {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 26px;
+    }
+    .btn-whatsapp { background: #25d366; color: #0b0c10; }
+    .btn-whatsapp:hover { filter: brightness(1.05); transform: translateY(-2px); }
+    .btn-email    { background: #ea4335; color: white; }
+    .btn-email:hover { filter: brightness(1.05); transform: translateY(-2px); }
 
-  .btn { 
-    display: inline-block; 
-    padding: 10px 20px; 
-    margin-top: 15px; 
-    border: 2px solid #00d4ff; 
-    color: #00d4ff; 
-    border-radius: 5px; 
-    text-decoration: none; 
-    transition: 0.3s; 
-  }
+    /* ---------- Footer ---------- */
+    footer { text-align: center; padding: 28px 18px; color: #a8b7bb; border-top: 1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.35); }
 
-  .btn:hover { 
-    background: #00d4ff; 
-    color: #111; 
-  }
+    /* ---------- Keyframes ---------- */
+    @keyframes shine { to { background-position: 200% center; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(102,252,241,.6); } 100% { box-shadow: 0 0 0 24px rgba(102,252,241,0); } }
 
-  @keyframes shine { to { background-position: 200% center; } }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(30px);} to { opacity:1; transform:translateY(0);} }
-</style>
+    /* ---------- Utilities ---------- */
+    .highlight-pulse { box-shadow: 0 0 0 0 rgba(102,252,241,.6); animation: pulse 1.6s ease-out 1; }
+
+    /* ---------- Mobile Responsive Layout ---------- */
+    @media (max-width: 640px){
+      /* Hero & sections adjustments */
+      .home-section { padding: 60px 12px 50px; }
+      .home-content h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); }
+      .tagline { font-size: clamp(0.95rem, 3vw, 1.1rem); }
+      section { padding: 60px 12px; }
+      .skills-grid { gap: 10px; }
+      .skill-pill { padding: 8px 10px; font-size: 0.9rem; }
+      .contact-actions { flex-direction: column; gap: 10px; }
+
+      /* Navigation bar shrink */
+      nav {
+        gap: 12px;
+        padding: 8px 10px;
+        flex-wrap: wrap;
+      }
+      nav a {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+      }
+
+      /* CTA buttons fit in one line */
+      .cta-row {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      .cta-row .btn {
+        flex-shrink: 1;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Starfield -->
+  <canvas id="stars"></canvas>
 
-<canvas id="bgCanvas"></canvas>
+  <!-- Nav -->
+  <nav id="nav">
+    <a class="active" href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#work">What I Work With</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-<header>
-  <h1>Azeez ur Rahman</h1>
-  <p>Website Design | Tech Enthusiast | Video Editing & Design</p>
-</header>
+  <!-- Home -->
+  <section id="home" class="home-section">
+    <div class="home-content container">
+      <h1>Hello, I'm <span style="color:var(--brand2)">Azeez ur Rahman</span></h1>
+      <p class="tagline">Web Developer | Designer | Tech Enthusiast | Video Editor</p>
+      <div class="cta-row">
+        <a href="#about" class="btn btn-primary" id="exploreBtn"><i class="fa-solid fa-arrow-down"></i> Explore More</a>
+        <a href="#contact" class="btn btn-ghost"><i class="fa-solid fa-message"></i> Contact</a>
+      </div>
+    </div>
+  </section>
 
-<section id="about">
-  <h2>About Me</h2>
-  <p>Hello, I'm Azeez ur Rahman. I'm Passionate about technology and learning coding, constantly exploring new ways to create, learn, and innovate in the world of computers. Alongside coding, I also enjoy video editing and designing, blending creativity with technical skills to build unique projects.</p>
-</section>
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="card" id="aboutCard">
+        <p class="about-text">
+          Hello, I'm <strong>Azeez ur Rahman</strong>. I'm passionate about technology and learning coding, constantly exploring new ways to create, learn, and innovate in the world of computers.
+          Alongside coding, I also enjoy <strong>video editing and designing</strong>, blending creativity with technical skills to build unique projects.
+        </p>
+      </div>
+    </div>
+  </section>
 
-<section id="skills">
-  <h2>Skills</h2>
-  <ul>
-    <li>Learning Coding & Programming</li>
-    <li>Website Design</li>
-    <li>Video Editing</li>
-    <li>Technology Enthusiasm</li>
-    <li>Graphic Design</li>
-  </ul>
-</section>
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title">Skills</h2>
+      <div class="card">
+        <div class="skills-grid">
+          <div class="skill-pill"><i class="fa-brands fa-html5"></i> HTML</div>
+          <div class="skill-pill"><i class="fa-brands fa-css3-alt"></i> CSS</div>
+          <div class="skill-pill"><i class="fa-brands fa-js-square"></i> JavaScript</div>
+          <div class="skill-pill"><i class="fa-solid fa-code"></i> Learning Coding & Programming</div>
+          <div class="skill-pill"><i class="fa-solid fa-browser"></i> Website Design</div>
+          <div class="skill-pill"><i class="fa-solid fa-video"></i> Video Editing</div>
+          <div class="skill-pill"><i class="fa-solid fa-microchip"></i> Technology Enthusiasm</div>
+          <div class="skill-pill"><i class="fa-solid fa-pencil-ruler"></i> Graphic Design</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Email: <a href="mailto:azeezurr21@gmail.com" style="color:#00d4ff;">azeezurr21@gmail.com</a></p>
-  <p>Instagram: <a href="https://instagram.com/th_azeez_" target="_blank" style="color:#00d4ff;">@th_azeez_</a> | <a href="https://instagram.com/theeditvilla" target="_blank" style="color:#00d4ff;">@theeditvilla</a></p>
-  <a href="mailto:azeezurr21@gmail.com" class="btn">Send Email</a>
-</section>
+  <!-- What I Work With -->
+  <section id="work">
+    <div class="container">
+      <h2 class="section-title">What I Work With</h2>
+      <div class="card">
+        <div class="skills-grid">
+          <div class="skill-pill work-pill"><i class="fa-brands fa-html5"></i> HTML</div>
+          <div class="skill-pill work-pill"><i class="fa-brands fa-css3-alt"></i> CSS</div>
+          <div class="skill-pill work-pill"><i class="fa-brands fa-js-square"></i> JavaScript</div>
+          <div class="skill-pill work-pill"><i class="fa-solid fa-draw-polygon"></i> Canvas</div>
+          <div class="skill-pill work-pill"><i class="fa-solid fa-video"></i> Video Editing Softwares</div>
+          <div class="skill-pill work-pill"><i class="fa-solid fa-lightbulb"></i> Creative Design Concepts</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<footer>
-  <p>🚀 Designed & Developed by Azeez Ur Rahman</p>
-</footer>
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Let’s Connect</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fa-brands fa-instagram"></i></div>
+          <h3>Instagram</h3>
+          <p>
+            <a href="https://instagram.com/th_azeez" target="_blank">@th_azeez</a><br/>
+            <a href="https://instagram.com/theeditvilla" target="_blank">@theeditvilla</a>
+          </p>
+        </div>
 
-<script>
-  // Scroll reveal
-  const sections = document.querySelectorAll('section, footer');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting) {
-        entry.target.style.opacity = 1;
-        entry.target.style.transform = 'translateY(0)';
-      }
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+          <h3>Phone</h3>
+          <p><a href="tel:+918341047749">+91 8341047749</a></p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+          <h3>Email</h3>
+          <p><a href="mailto:azeezurr21@gmail.com">azeezurr21@gmail.com</a></p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <h3>Location</h3>
+          <p>India</p>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <a class="btn btn-whatsapp" href="https://wa.me/918341047749?text=Hi%20Azeez,%20I%20saw%20your%20portfolio!" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Message on WhatsApp
+        </a>
+        <a class="btn btn-email" href="mailto:azeezurr21@gmail.com?subject=Let%27s%20Connect&body=Hi%20Azeez,%0D%0A%0D%0AI%20found%20your%20portfolio%20and%20would%20love%20to%20connect." target="_blank">
+          <i class="fa-regular fa-paper-plane"></i> Email Me
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> — Designed & Developed by Azeez Ur Rahman
+  </footer>
+
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a');
+    const setActive = () => {
+      let current = 'home';
+      sections.forEach(sec => {
+        const top = window.scrollY + 140;
+        if (top >= sec.offsetTop) current = sec.id;
+      });
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    };
+    window.addEventListener('scroll', setActive);
+    setActive();
+
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18 });
+    document.querySelectorAll('.card, .contact-card').forEach(el=>io.observe(el));
+
+    document.getElementById('exploreBtn').addEventListener('click', ()=>{
+      const about = document.getElementById('aboutCard');
+      setTimeout(()=> {
+        about.classList.add('highlight-pulse');
+        setTimeout(()=>about.classList.remove('highlight-pulse'), 1600);
+      }, 550);
     });
-  }, {threshold:0.2});
-  sections.forEach(sec => observer.observe(sec));
 
-  // Shooting Stars Background
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = 350;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  class Star {
-    constructor() {
-      this.reset();
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const STAR_COUNT = 180;
+    const stars = [];
+    for (let i=0; i<STAR_COUNT; i++){
+      stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.4 + 0.2, dx: (Math.random()-.5)*0.2, dy: (Math.random()-.5)*0.2, tw: Math.random()*100 });
     }
-    reset() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height / 2;
-      this.len = Math.random() * 80 + 10;
-      this.speed = Math.random() * 4 + 2;
-      this.opacity = Math.random() * 0.5 + 0.5;
+
+    const meteors = [];
+    function spawnMeteor(){
+      const startX = Math.random()*canvas.width;
+      const startY = -20;
+      const speed = 6 + Math.random()*5;
+      meteors.push({ x: startX, y: startY, vx: -speed, vy: speed*0.6, len: 120 + Math.random()*120, life: 0, maxLife: 60 + Math.random()*40, opacity: .9 });
+      const next = 800 + Math.random()*2500;
+      setTimeout(spawnMeteor, next);
     }
-    update() {
-      this.x -= this.speed;
-      this.y += this.speed / 2;
-      if(this.x < 0 || this.y > height){
-        this.reset();
-        this.x = width + 10;
+    setTimeout(spawnMeteor, 1000);
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (const s of stars){
+        s.x += s.dx; s.y += s.dy; s.tw += 0.02;
+        if (s.x<0) s.x = canvas.width; if (s.x>canvas.width) s.x = 0;
+        if (s.y<0) s.y = canvas.height; if (s.y>canvas.height) s.y = 0;
+        const glow = (Math.sin(s.tw)+1)/2 * 0.5 + 0.3;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,255,255,${glow})`;
+        ctx.fill();
       }
+
+      for (let i=meteors.length-1; i>=0; i--){
+        const m = meteors[i];
+        m.x += m.vx; m.y += m.vy; m.life++;
+        const angle = Math.atan2(m.vy, m.vx);
+        const tx = Math.cos(angle)*m.len;
+        const ty = Math.sin(angle)*m.len;
+        const grad = ctx.createLinearGradient(m.x, m.y, m.x - tx, m.y - ty);
+        grad.addColorStop(0, `rgba(255,255,255,${m.opacity})`);
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x - tx, m.y - ty);
+        ctx.stroke();
+        if (m.life > m.maxLife || m.x < -200 || m.y > canvas.height + 200){
+          meteors.splice(i,1);
+        }
+      }
+      requestAnimationFrame(draw);
     }
-    draw() {
-      ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(this.x - this.len, this.y + this.len / 2);
-      ctx.stroke();
-    }
-  }
-
-  const stars = [];
-  for(let i=0; i<30; i++) stars.push(new Star());
-
-  function animateStars() {
-    ctx.clearRect(0,0,width,height);
-    stars.forEach(s => { s.update(); s.draw(); });
-    requestAnimationFrame(animateStars);
-  }
-
-  animateStars();
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = 350;
-  });
-</script>
-
+    draw();
+  </script>
 </body>
 </html>
